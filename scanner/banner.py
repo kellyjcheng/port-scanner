@@ -4,30 +4,29 @@ import socket
 from config.settings import DEFAULT_TIMEOUT
 
 
-def grab_banner(target_ip, port):
+def grab_banner(ip, port):
     """
-    Behavior: Connects to target_ip:port and attempts to read a service banner.
-              For port 80 an HTTP HEAD request is sent first to elicit a response;
-              for all other ports the socket listens immediately after connecting.
-              Received bytes are decoded as UTF-8 (with replacement for invalid
-              bytes) and stripped of surrounding whitespace.
+    Behavior: Opens a TCP socket connection to ip:port and attempts to receive
+              up to 1024 bytes of data that the service sends on connect (its
+              banner). The received bytes are decoded leniently so non-UTF-8
+              bytes are replaced rather than raising an error. The socket is
+              always closed after the attempt.
     Parameters:
-        target_ip (str): The IPv4 address of the target host.
-        port (int): The open port from which to grab a banner.
+        ip   (str): The IPv4 address of the target host.
+        port (int): The open port from which to read a banner.
     Returns:
-        str | None: The decoded banner string if data is received, or None if the
-                    connection times out, is reset, returns no data, or fails.
+        str | None: The stripped banner string if any data is received, or None
+                    if the connection times out, is refused, is reset, or the
+                    service sends no data.
     Exceptions:
-        None raised; socket.timeout, ConnectionResetError, and socket.error are
-        caught internally and cause the function to return None.
+        None raised; all socket exceptions are caught internally.
     """
     try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.settimeout(DEFAULT_TIMEOUT)
-            sock.connect((target_ip, port))
-            if port == 80:
-                sock.sendall(b"HEAD / HTTP/1.0\r\n\r\n")
-            banner = sock.recv(1024)
-            return banner.decode("utf-8", errors="ignore").strip() or None
-    except (socket.timeout, ConnectionResetError, socket.error):
+        s = socket.socket()
+        s.settimeout(DEFAULT_TIMEOUT)
+        s.connect((ip, port))
+        banner = s.recv(1024).decode(errors="ignore")
+        s.close()
+        return banner.strip() or None
+    except Exception:
         return None

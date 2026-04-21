@@ -42,3 +42,21 @@ def log_error(message):
         None raised.
     """
     print(f"{Fore.RED}[-]{Style.RESET_ALL} {message}")
+
+
+def log_open_port(port, service="Unknown", banner=None):
+    """
+    Behavior: Prints a formatted open-port result line in cyan. The output always
+              includes the port number and service name. When a banner string is
+              provided it is appended on the same line after a separator.
+    Parameters:
+        port    (int):      The open port number.
+        service (str):      Human-readable service name (default: "Unknown").
+        banner  (str|None): Optional banner text received from the service.
+    Returns:
+        None
+    Exceptions:
+        None raised.
+    """
+    banner_str = f"  |  {banner}" if banner else ""
+    print(f"{Fore.CYAN}[OPEN]{Style.RESET_ALL} {port:>5}/tcp  →  {service}{banner_str}")
