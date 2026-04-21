@@ -17,21 +17,23 @@ A modular network reconnaissance tool built in Python that performs multi-thread
 ---
 
 ## Project Structure
+
+```text
 port-scanner/
 │
 ├── main.py
 ├── scanner/
-│ ├── core.py
-│ ├── threading_utils.py
-│ ├── banner.py
-│ ├── services.py
+│   ├── core.py
+│   ├── threading_utils.py
+│   ├── banner.py
+│   └── services.py
 │
 ├── utils/
-│ ├── logger.py
-│ ├── validators.py
+│   ├── logger.py
+│   └── validators.py
 │
 ├── config/
-│ └── settings.py
+│   └── settings.py
 │
 ├── scan_results.json
 └── requirements.txt
