@@ -1,18 +1,44 @@
 # utils/logger.py
 
-# This file provides simple logging utilities for consistent output formatting.
+from colorama import Fore, Style, init
 
-# TODO:
-# 1. Create functions:
-#    - log_info(message)
-#    - log_success(message)
-#    - log_error(message)
-#
-# 2. Use color formatting (optional with colorama):
-#    - INFO = default color
-#    - SUCCESS = green
-#    - ERROR = red
-#
-# Notes:
-# - Keep output clean and readable
-# - Avoid printing directly in other files (use logger instead)
+init(autoreset=True)
+
+
+def log_info(message):
+    """
+    Behavior: Prints an informational message to stdout with a neutral [*] prefix.
+    Parameters:
+        message (str): The message to display.
+    Returns:
+        None
+    Exceptions:
+        None raised.
+    """
+    print(f"{Style.BRIGHT}[*]{Style.RESET_ALL} {message}")
+
+
+def log_success(message):
+    """
+    Behavior: Prints a success message to stdout in green with a [+] prefix.
+    Parameters:
+        message (str): The message to display.
+    Returns:
+        None
+    Exceptions:
+        None raised.
+    """
+    print(f"{Fore.GREEN}[+]{Style.RESET_ALL} {message}")
+
+
+def log_error(message):
+    """
+    Behavior: Prints an error message to stdout in red with a [-] prefix.
+    Parameters:
+        message (str): The message to display.
+    Returns:
+        None
+    Exceptions:
+        None raised.
+    """
+    print(f"{Fore.RED}[-]{Style.RESET_ALL} {message}")
